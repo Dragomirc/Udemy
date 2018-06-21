@@ -1,12 +1,47 @@
 import React, { Component } from 'react'
 
 class Grid extends Component {
+  constructor(props) {
+    super(props)
+    let repos
+    if (__isBrowser__) {
+      repos = window.__INITIAL_DATA__;
+      delete window.__INITIAL_DATA__;
+    } else {
+      repos = props.staticContext.data;
+    }
+    this.state = {
+      repos,
+      loading: repos ? false : true
+    }
+  }
+
+  componentDidMount() {
+    if (!this.state.repos) {
+      this.fetchRepos(this.props.match.params.id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { match, fetchInitialData } = this.props;
+    if (nextProps.match.params.id !== match.params.id) {
+      this.fetchRepos(nextProps.match.params.id)
+    }
+  }
+  fetchRepos(lang) {
+    this.setState(() => ({ loading: true }))
+    this.props.fetchInitialData(lang)
+      .then((repos) => this.setState(() => ({
+        repos,
+        loading: false
+      })))
+  }
 
   render() {
-    const repos = this.props.data;
-
-
-
+    const { repos, loading } = this.state;
+    if (loading) {
+      return <div>LOADING</div>
+    }
     return (
       <ul style={{ display: 'flex', flexWrap: 'wrap' }}>
         {repos.map(({ name, owner, stargazers_count, html_url }) => (
