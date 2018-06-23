@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-/node_modules
-bundle.js
-npm-debug.log
-.DS_Store
-
-# IntelliJ
-*.iml
-/.idea
-||||||| merged common ancestors
-=======
 # Logs
 logs
 *.log
@@ -67,4 +56,3 @@ typings/
 
 # dotenv environment variables file
 .env
->>>>>>> 1d04609025fa45153d276162b0cd91455b5295b0

@@ -1,0 +1,3 @@
+[submodule "WebpackProject"]
+	path = WebpackProject
+	url = ./WebpackProject
