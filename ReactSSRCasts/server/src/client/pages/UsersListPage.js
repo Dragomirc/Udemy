@@ -8,7 +8,7 @@ class UsersList extends Component {
     this.props.fetchUsers();
   }
 
-  // renderUsers() { return this.props.users.map(({ name, id }) => <li key={id}>{name}</li>) }
+
   renderUsers = () => this.props.users.map(({ name, id }) => <li key={id}>{name}</li>);
 
   render() {
@@ -19,5 +19,9 @@ class UsersList extends Component {
   }
 }
 
-const mapStateToProps = ({ users }) => ({ users })
-export default connect(mapStateToProps, ({ fetchUsers }))(UsersList)
+const mapStateToProps = ({ users }) => ({ users });
+const loadData = (store) => {
+
+  return store.dispatch(fetchUsers())
+};
+export default { component: connect(mapStateToProps, ({ fetchUsers }))(UsersList), loadData }
