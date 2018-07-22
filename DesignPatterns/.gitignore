@@ -1,19 +1,17 @@
-
-/node_modules
-bundle.js
-npm-debug.log
-.DS_Store
-
-# IntelliJ
-*.iml
-/.idea
-
 # Logs
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.DS_Store
+npm-debug.log
+
+*.env
+
+.cache/
+dist/
+node_modules/ 
 
 # Runtime data
 pids
@@ -66,5 +64,3 @@ typings/
 
 # dotenv environment variables file
 .env
->>>>>>> 1d04609025fa45153d276162b0cd91455b5295b0
->>>>>>> 77debf2a2af30cbe1262231be5798544b15a7984
