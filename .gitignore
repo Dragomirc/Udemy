@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /node_modules
 bundle.js
 npm-debug.log
@@ -7,8 +7,7 @@ npm-debug.log
 # IntelliJ
 *.iml
 /.idea
-||||||| merged common ancestors
-=======
+
 # Logs
 logs
 *.log
@@ -68,3 +67,4 @@ typings/
 # dotenv environment variables file
 .env
 >>>>>>> 1d04609025fa45153d276162b0cd91455b5295b0
+>>>>>>> 77debf2a2af30cbe1262231be5798544b15a7984
