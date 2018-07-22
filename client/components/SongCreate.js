@@ -20,7 +20,6 @@ class SongCreate extends Component {
     this.setState({ [name]: value });
   };
   render() {
-    console.log("SongCreate", this.props.data);
     return (
       <div>
         <form onSubmit={this.onFormSubmit}>
