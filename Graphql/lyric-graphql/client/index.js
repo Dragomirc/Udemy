@@ -1,3 +1,4 @@
+import "./style/style.css";
 import React from "react";
 import ReactDOM from "react-dom";
 //Communicates with the GraphQL server and stores the data locally
