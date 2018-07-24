@@ -8,7 +8,11 @@ import { ApolloProvider } from "react-apollo";
 
 import App from "./components/App";
 
-const client = new ApolloClient({});
+//This configuration takes ever single piece of data fetched from the backend, and runs it through this function
+//!! every query needs to request the id in order to make this work
+const client = new ApolloClient({
+  dataIdFromObject: object => object.id
+});
 const Root = () => {
   return (
     <ApolloProvider client={client}>

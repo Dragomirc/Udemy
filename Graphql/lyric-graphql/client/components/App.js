@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Route } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import SongList from "./SongList";
 import SongCreate from "./SongCreate";
 import SongDetail from "./SongDetail";
@@ -7,11 +7,11 @@ import SongDetail from "./SongDetail";
 const App = props => (
   <div className="container">
     <HashRouter>
-      <div>
+      <Switch>
         <Route exact path="/" component={SongList} />
         <Route path="/songs/new" component={SongCreate} />
         <Route path="/songs/:id" component={SongDetail} />
-      </div>
+      </Switch>
     </HashRouter>
   </div>
 );
