@@ -1,7 +1,6 @@
-//<<<<<<<<<<<<<<<<<<<<FACADE DESIGN PATTERN>>>>>>>>>>>>>>>>>>>>>>>>>
-// simplify the interface to reduce an API footprint. (eg: if a lass has 4 methods and we want to expose just 3 to the consumer)
-// great way to remove API elements you want to protect
-// it helps control applicaiton features/access
+//<<<<<<<<<<<<<<<<<<<<OBSERVER DESIGN PATTERN>>>>>>>>>>>>>>>>>>>>>>>>>
+// Announces events without explicit communication with the objects it's announcing to
+// Dispatches events and listeners
 
 (function(win, $) {
   function clone(source, outcome) {
@@ -24,12 +23,32 @@
   Circle.prototype.get = function() {
     return this.item;
   };
-
-  /// !!!! FACADE PATTERN
+  //!!! Chain responsability design pattern
+  Circle.prototype.next = function(shp) {
+    if (shp) {
+      this.nextShape = shp;
+    }
+    return this.nextShape;
+  };
+  //!!! Chain responsability design pattern
+  Circle.prototype.chainDo = function(action, args, count) {
+    this[action].apply(this, args);
+    if (count && this.nextShape) {
+      setTimeout(
+        binder(
+          this,
+          function() {
+            this.nextShape.chainDo(action, args, --count);
+          },
+          20
+        )
+      );
+    }
+  };
   Circle.prototype.getID = function() {
     return this.id;
   };
-  /// !!!! FACADE PATTERN
+
   Circle.prototype.setID = function(id) {
     this.id = id;
   };
@@ -37,18 +56,19 @@
   function Rect() {
     this.item = $('<div class="rect"></div>');
   }
-  /// !!!! FACADE PATTERN
+  function binder(scope, func) {
+    return function() {
+      return func.apply(scope, arguments);
+    };
+  }
   function shapeFacade(shp) {
     return {
-      color: function(clr) {
-        shp.color(clr);
-      },
-      move: function(x, y) {
-        shp.move(x, y);
-      },
-      getID: function() {
-        return shp.getID();
-      }
+      color: binder(shp, shp.color),
+      move: binder(shp, shp.move),
+      getID: binder(shp, shp.getID),
+      addEvent: binder(shp, shp.addEvent),
+      removeEvent: binder(shp, shp.removeEvent),
+      dispatchEvent: binder(shp, shp.dispatchEvent)
     };
   }
   function selfDestructDecorator(obj) {
@@ -59,6 +79,39 @@
       obj.item.remove();
     };
   }
+  //!!! Observer desgin pattern
+  function eventDispatcherDecorator(o) {
+    const list = {};
+    o.addEvent = function(type, listener) {
+      if (!list[type]) {
+        list[type] = [];
+      }
+      if (list[type].indexOf(listener) === -1) {
+        list[type].push(listener);
+      }
+    };
+    o.removeEvent = function(type, listener) {
+      const a = list[type];
+      if (a) {
+        const index = a.indexOf(listener);
+        if (index > -1) {
+          a.splice(index, 1);
+        }
+      }
+    };
+    o.dispatchEvent = function(e) {
+      const aList = list[e.type];
+      if (aList) {
+        if (!e.target) {
+          e.target = this;
+        }
+        for (let index in aList) {
+          aList[index](e);
+        }
+      }
+    };
+  }
+
   clone(Circle, Rect);
   function RedCircleBuilder() {
     this.item = new Circle();
@@ -152,11 +205,26 @@
       }
       function create(left, top, color) {
         const shape = _sf.create(color);
+        const index = _aShape.length - 1;
+        eventDispatcherDecorator(shape);
         shape.move(left, top);
-        Circle.setID(_aCircle.length);
-        _aShape.push(circle);
-
+        shape.setID(_aShape.length);
+        _aShape.push(shape);
+        if (index !== -1) {
+          _aShape[index].next(shape);
+        }
         return shapeFacade(shape);
+      }
+
+      function chainTint(count) {
+        let index = Math.max(0, _aShape.length - count);
+        let color =
+          "#" +
+          Math.floor(Math.random() * 255).toString(16) +
+          Math.floor(Math.random() * 255).toString(16) +
+          Math.floor(Math.random() * 255).toString(16);
+
+        _aShape[index].chainDo("color", [color], count);
       }
       function tint(clr) {
         _cc.action("color", clr);
@@ -165,8 +233,8 @@
       function move(left, top) {
         _cc.action("move", left, top);
       }
-      function add(circle) {
-        _stage.add(_aCircle[circle.getID()].get());
+      function add(shape) {
+        _stage.add(_aShape[shape.getID()].get());
       }
       function index() {
         return _aShape.length;
@@ -178,7 +246,8 @@
         register: registerShape,
         setStage,
         tint,
-        move
+        move,
+        chainTint
       };
     }
     return {
@@ -198,7 +267,14 @@
     sg.setStage(new StageAdapter(".advert"));
     $(".advert").click(function(e) {
       const circle = sg.create(e.pageX - 25, e.pageY - 25, "red");
+      const func = function() {
+        console.log("It's over");
+      };
+      circle.addEvent("over", func);
+      circle.dispatchEvent({ type: "over" });
+      circle.removeEvent("over", func);
       sg.add(circle);
+      sg.chainTint(5);
       flyWeightFader($(e.target));
     });
     $(document).keydown(function(e) {

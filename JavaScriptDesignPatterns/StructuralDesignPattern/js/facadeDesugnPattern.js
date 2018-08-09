@@ -1,6 +1,7 @@
-//<<<<<<<<<<<<<<<<<<<<ADAPTER DESIGN PATTERN>>>>>>>>>>>>>>>>>>>>>>>>>
-// Is used to change the interface of an object
-// The adapter comes into play when you have two objects and they don't know how to communicate with each other
+//<<<<<<<<<<<<<<<<<<<<FACADE DESIGN PATTERN>>>>>>>>>>>>>>>>>>>>>>>>>
+// simplify the interface to reduce an API footprint. (eg: if a class has 4 methods and we want to expose just 3 to the consumer)
+// great way to remove API elements you want to protect
+// it helps control application features/access
 
 (function(win, $) {
   function clone(source, outcome) {
@@ -23,8 +24,40 @@
   Circle.prototype.get = function() {
     return this.item;
   };
+
+  /// !!!! FACADE PATTERN
+  Circle.prototype.getID = function() {
+    return this.id;
+  };
+  /// !!!! FACADE PATTERN
+  Circle.prototype.setID = function(id) {
+    this.id = id;
+  };
+
   function Rect() {
     this.item = $('<div class="rect"></div>');
+  }
+  /// !!!! FACADE PATTERN
+  function shapeFacade(shp) {
+    return {
+      color: function(clr) {
+        shp.color(clr);
+      },
+      move: function(x, y) {
+        shp.move(x, y);
+      },
+      getID: function() {
+        return shp.getID();
+      }
+    };
+  }
+  function selfDestructDecorator(obj) {
+    obj.item.click(function() {
+      obj.kill();
+    });
+    obj.kill = function() {
+      obj.item.remove();
+    };
   }
   clone(Circle, Rect);
   function RedCircleBuilder() {
@@ -53,6 +86,7 @@
     const rect = new Rect();
     rect.color("yellow");
     rect.move(40, 40);
+    selfDestructDecorator(rect);
     this.item.get().append(rect.get());
     return this.item;
   };
@@ -68,7 +102,6 @@
       }
     };
   };
-  //!!! Adapter Design Pattern
   function StageAdapter(id) {
     this.index = 0;
     this.context = $(id);
@@ -82,13 +115,34 @@
   StageAdapter.prototype.remove = function(index) {
     this.context.remove("." + this.SIG + index);
   };
+
+  function CompositeController(a) {
+    this.a = a;
+  }
+  CompositeController.prototype.action = function(act) {
+    let args = Array.prototype.slice.call(arguments);
+    args.shift();
+    for (let item in this.a) {
+      this.a[item][act].apply(this.a[item], args);
+    }
+  };
+
+  function flyWeightFader(item) {
+    if (item.hasClass("circle")) {
+      item.fadeTo(0.5, item.css("opacity") * 0.5);
+    }
+  }
   const ShapeGeneratorSingleton = (function() {
     let instance;
     function init() {
       let _aShape = [];
       let _stage;
       let _sf = new ShapeFactory();
+      let _cc = new CompositeController(_aShape);
 
+      function _position(shape, left, top) {
+        shape.move(left, top);
+      }
       function registerShape(name, cls) {
         _sf.register(name, cls);
       }
@@ -99,12 +153,19 @@
       function create(left, top, color) {
         const shape = _sf.create(color);
         shape.move(left, top);
-        return shape;
+        shape.setID(_aShape.length);
+        _aShape.push(shape);
+        return shapeFacade(shape);
+      }
+      function tint(clr) {
+        _cc.action("color", clr);
       }
 
-      function add(circle) {
-        _stage.add(circle.get());
-        _aShape.push(circle);
+      function move(left, top) {
+        _cc.action("move", left, top);
+      }
+      function add(shape) {
+        _stage.add(_aShape[shape.getID()].get());
       }
       function index() {
         return _aShape.length;
@@ -114,7 +175,9 @@
         create,
         add,
         register: registerShape,
-        setStage
+        setStage,
+        tint,
+        move
       };
     }
     return {
@@ -128,22 +191,29 @@
   })();
 
   $(win.document).ready(function() {
-    const cg = ShapeGeneratorSingleton.getInstance();
-    cg.register("red", RedCircleBuilder);
-    cg.register("blue", BlueCircleBuilder);
-    cg.setStage(new StageAdapter(".advert"));
+    const sg = ShapeGeneratorSingleton.getInstance();
+    sg.register("red", RedCircleBuilder);
+    sg.register("blue", BlueCircleBuilder);
+    sg.setStage(new StageAdapter(".advert"));
     $(".advert").click(function(e) {
-      const circle = cg.create(e.pageX - 25, e.pageY - 25, "red");
-      cg.add(circle);
+      const circle = sg.create(e.pageX - 25, e.pageY - 25, "red");
+      sg.add(circle);
+      flyWeightFader($(e.target));
     });
-    $(document).keypress(function(e) {
+    $(document).keydown(function(e) {
       if (e.key === "a") {
-        const circle = cg.create(
+        const circle = sg.create(
           Math.floor(Math.random() * 600),
           Math.floor(Math.random() * 600),
           "blue"
         );
-        cg.add(circle);
+        sg.add(circle);
+      } else if (e.key === "t") {
+        sg.tint("black");
+      } else if (e.key === "ArrowRight") {
+        sg.move("+=5px", "+=0px");
+      } else if (e.key === "ArrowLeft") {
+        sg.move("-=5px", "+=0px");
       }
     });
   });
