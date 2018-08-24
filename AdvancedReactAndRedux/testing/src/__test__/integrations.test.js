@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  moxios.install(); // insure the same stubrequest is not used somewhere else in our test suit
+  moxios.uninstall(); // insure the same stubrequest is not used somewhere else in our test suit
 });
 it("can fetch a list of comments and display them", done => {
   // Attempt to render the *entire* app
