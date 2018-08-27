@@ -1,24 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "actions";
+import requireAuth from "components/requireAuth";
 
 class CommentBox extends Component {
   state = {
     comment: ""
   };
-  // Our component just got rendered
-  componentDidMount = () => {
-    this.shouldNavigateAway();
-  };
-  // Our compoent just received new props
-  componentDidUpdate = () => {
-    this.shouldNavigateAway();
-  };
-  shouldNavigateAway = () => {
-    if (!this.props.auth) {
-      console.log("I need to leave!!!");
-    }
-  };
+
   handleChange = ({ target }) => {
     this.setState({ comment: target.value });
   };
@@ -45,8 +34,7 @@ class CommentBox extends Component {
     );
   }
 }
-const mapStateToProps = ({ auth }) => ({ auth });
 export default connect(
-  mapStateToProps,
+  null,
   actions
-)(CommentBox);
+)(requireAuth(CommentBox));
