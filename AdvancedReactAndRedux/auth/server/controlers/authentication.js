@@ -8,7 +8,7 @@ const tokenForUser = user => {
 };
 
 exports.signin = (req, res, next) => {
-  //User has alreadt their email and password auth's
+  //User has already their email and password auth's
   // We just need to give them a token
   res.send({ token: tokenForUser(req.user) });
 };
@@ -29,6 +29,7 @@ exports.signup = (req, res, next) => {
       return res.status(422).send({ error: "Email is in use" });
     }
     // If a user with eamil does NOT exist, create and save user record
+
     const user = new User({
       email: email,
       password: password
@@ -37,6 +38,7 @@ exports.signup = (req, res, next) => {
       if (err) {
         return next(err);
       }
+
       // Respond to request indicating the user was created
       res.json({ token: tokenForUser(user) });
     });
