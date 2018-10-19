@@ -19,5 +19,14 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "jest-cli": "^20.0.4",
     "react-test-renderer": "^16.5.2"
-  }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

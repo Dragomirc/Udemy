@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`App renders correctly 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <App />,
@@ -20,7 +20,10 @@ ShallowWrapper {
       "children": Array [
         <h2>
           Gift Giver
-</h2>,
+        </h2>,
+        <div
+          className="gift-list"
+        />,
         <Button
           active={false}
           block={false}
@@ -29,9 +32,9 @@ ShallowWrapper {
           className="btn-add"
           disabled={false}
           onClick={[Function]}
->
+        >
           Add Gift
-</Button>,
+        </Button>,
       ],
     },
     "ref": null,
@@ -46,6 +49,18 @@ ShallowWrapper {
         "ref": null,
         "rendered": "Gift Giver",
         "type": "h2",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [],
+          "className": "gift-list",
+        },
+        "ref": null,
+        "rendered": Array [],
+        "type": "div",
       },
       Object {
         "instance": null,
@@ -77,7 +92,10 @@ ShallowWrapper {
         "children": Array [
           <h2>
             Gift Giver
-</h2>,
+          </h2>,
+          <div
+            className="gift-list"
+          />,
           <Button
             active={false}
             block={false}
@@ -86,9 +104,9 @@ ShallowWrapper {
             className="btn-add"
             disabled={false}
             onClick={[Function]}
->
+          >
             Add Gift
-</Button>,
+          </Button>,
         ],
       },
       "ref": null,
@@ -103,6 +121,18 @@ ShallowWrapper {
           "ref": null,
           "rendered": "Gift Giver",
           "type": "h2",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [],
+            "className": "gift-list",
+          },
+          "ref": null,
+          "rendered": Array [],
+          "type": "div",
         },
         Object {
           "instance": null,
@@ -142,9 +172,7 @@ ShallowWrapper {
         },
       },
     },
-    "attachTo": undefined,
     "disableLifecycleMethods": true,
-    "hydrateIn": undefined,
   },
 }
 `;
