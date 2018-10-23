@@ -1,11 +1,13 @@
 import React from "react";
-import {shallow} from "enzyme";
+import { shallow } from "enzyme";
 import App from "./App";
 
-
-describe('App',()=>{
-  const app = shallow(<App/>)
-  it('renderes properly', () => {
-    expect(app).toMatchSnapshot()
-  })
-})
+describe("App", () => {
+  const app = shallow(<App />);
+  it("renderes properly", () => {
+    expect(app).toMatchSnapshot();
+  });
+  it("contains a conected Wallet component", () => {
+    expect(app.find("Connect(Wallet)").exists()).toBe(true);
+  });
+});
