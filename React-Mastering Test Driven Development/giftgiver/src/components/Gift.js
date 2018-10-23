@@ -19,7 +19,7 @@ class Gift extends Component {
     this.setState({ [name]: value });
   render() {
     return (
-      <div>
+      <div className="gift">
         <Form>
           <FormGroup>
             <ControlLabel>Person</ControlLabel>
