@@ -1,0 +1,18 @@
+import React, { Component } from "react";
+import { connect } from "react-redux";
+
+export class Wallet extends Component {
+  render() {
+    return (
+      <div>
+        <h3 className="balance">Wallet balance: {this.props.balance}</h3>
+        <label htmlFor="input-wallet">
+          <input type="text" id="input-wallet" className="input-wallet" />
+        </label>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => ({ balance: state });
+export default connect(mapStateToProps)(Wallet);
