@@ -1,5 +1,6 @@
 import balanceReducer from "./balance";
 import balanceReducer2 from "./balance";
+
 import * as constants from "../actions/constants";
 
 describe("balanceReducer", () => {
