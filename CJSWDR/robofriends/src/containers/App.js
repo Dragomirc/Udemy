@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-import CardList from "../CardList";
-import SearchBox from "../SearchBox";
-import Scroll from "../Scroll";
+import { connect } from "react-redux";
+import { fetchRobots } from "../redux/actions/get-robots";
+import CardList from "../components/CardList";
+import SearchBox from "../components/SearchBox";
+import Scroll from "../components/Scroll";
+import ErrorBoundry from "../components/ErrorBoundry";
 import "./App.css";
 class App extends Component {
   state = {
-    searchValue: "",
-    robots: []
+    searchValue: ""
   };
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then(response => response.json())
-      .then(robots => this.setState({ robots }));
+    this.props.fetchRobots();
   }
   handleChange = ({ target: { value } }) => {
     this.setState({
@@ -20,26 +20,29 @@ class App extends Component {
     });
   };
   render() {
-    const expression = new RegExp(this.state.searchValue, "gi");
-    const filteredRobots = this.state.robots.filter(({ name }) =>
-      name.match(expression)
-    );
+    const { searchValue } = this.state;
+    const robots = this.props;
+    const expression = new RegExp(searchValue, "gi");
+    const filteredRobots = robots.filter(({ name }) => name.match(expression));
     if (!this.state.robots.length) {
       return <h1>Loading</h1>;
     }
     return (
       <div className="tc">
         <h1 className="f2">RoboFriends</h1>
-        <SearchBox
-          searchValue={this.state.searchValue}
-          handleChange={this.handleChange}
-        />
+        <SearchBox searchValue={searchValue} handleChange={this.handleChange} />
         <Scroll>
-          <CardList robots={filteredRobots} />
+          <ErrorBoundry>
+            <CardList robots={filteredRobots} />
+          </ErrorBoundry>
         </Scroll>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = ({ robots }) => ({ robots });
+export default connect(
+  mapStateToProps,
+  { fetchRobots }
+)(App);

@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "./Card";
+
 const CardList = ({ robots }) => {
   const robotsList = robots.map((robotProps, index) => (
     <Card key={index} {...robotProps} />
