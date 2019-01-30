@@ -21,10 +21,12 @@ class App extends Component {
   };
   render() {
     const { searchValue } = this.state;
-    const robots = this.props;
+    const {
+      robots: { data: robots }
+    } = this.props;
     const expression = new RegExp(searchValue, "gi");
     const filteredRobots = robots.filter(({ name }) => name.match(expression));
-    if (!this.state.robots.length) {
+    if (!robots.length) {
       return <h1>Loading</h1>;
     }
     return (
