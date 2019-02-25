@@ -20,16 +20,11 @@ function pyramid(n, row = 0, level = "", column = 0) {
   }
   if (level.length === n * 2 - 1) {
     console.log(level);
-
     pyramid(n, row + 1);
     return;
   }
   let midPoint = Math.floor((n * 2 - 1) / 2);
-  if (
-    level.length < n * 2 - 1 &&
-    midPoint - row <= column &&
-    midPoint + row >= column
-  ) {
+  if (midPoint - row <= column && midPoint + row >= column) {
     level += "#";
   } else {
     level += " ";
