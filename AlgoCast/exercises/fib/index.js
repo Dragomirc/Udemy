@@ -8,6 +8,11 @@
 // Example:
 //   fib(4) === 3
 
-function fib(n) {}
+function fib(n, arr) {
+  if (n === 1) {
+    arr;
+    console.log(arr[n]);
+  }
+}
 
 module.exports = fib;
