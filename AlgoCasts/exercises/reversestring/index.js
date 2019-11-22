@@ -26,7 +26,6 @@ function reverse(str) {
   /** 3rd solution */
   let newStr = '';
   str.split('').forEach(char => {
-    debugger;
     newStr = char + newStr;
   });
   return newStr;

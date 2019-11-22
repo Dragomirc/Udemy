@@ -7,6 +7,25 @@
 //   palindrome("abba") === true
 //   palindrome("abcdefg") === false
 
-function palindrome(str) {}
+/** 1st solution */
+// function palindrome(str) {
+//   const reversedStr = str
+//     .split('')
+//     .reverse()
+//     .join('');
+//   return str === reversedStr;
+// }
+
+/**2nd solution */
+function palindrome(str) {
+  const tempArr = str.split('');
+  const midLen = Math.floor(tempArr.length / 2);
+  for (let i = 0; i < midLen; i++) {
+    if (tempArr[i] !== tempArr[tempArr.length - 1 - i]) {
+      return false;
+    }
+  }
+  return true;
+}
 
 module.exports = palindrome;
