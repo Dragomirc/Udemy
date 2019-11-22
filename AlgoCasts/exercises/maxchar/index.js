@@ -12,17 +12,17 @@ function maxChar(str) {
     if (tempObj[currChar]) {
       tempObj[currChar] = tempObj[currChar] + 1;
     } else {
-      tempObj[currChar] = 0;
+      tempObj[currChar] = 1;
     }
   }
-  const keysArray = Object.keys(tempObj);
-  let maxChar = keysArray[0];
-  let maxValue = tempObj[maxChar];
-  for (let i = 0; i < keysArray.length; i++) {
-    const currValue = tempObj[keysArray[i]];
+
+  let maxChar = '';
+  let maxValue = 0;
+  for (let char in tempObj) {
+    const currValue = tempObj[char];
     if (currValue > maxValue) {
-      maxChar = keysArray[i];
-      maxValue = tempObj[maxChar];
+      maxValue = currValue;
+      maxChar = char;
     }
   }
   return maxChar;
