@@ -29,16 +29,16 @@
 // }
 
 /**2ns solution */
-function steps(n, row = 0, col = 0, string = '') {
+function steps(n, row = 0, stair = '') {
   if (row === n) {
     return;
   }
 
-  if (col < n) {
-    string += col <= row ? '#' : ' ';
-    return steps(n, row, col + 1, string);
+  if (stair.length < n) {
+    stair += stair.length <= row ? '#' : ' ';
+    return steps(n, row, stair);
   }
-  console.log(string);
+  console.log(stair);
   steps(n, row + 1);
 }
 steps(3);
