@@ -37,11 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("./utils");
+var CsvFileReader_1 = require("./CsvFileReader");
 var MatchReader = /** @class */ (function () {
     function MatchReader(reader) {
         this.reader = reader;
         this.matches = [];
     }
+    MatchReader.fromCsv = function (fileName) {
+        return new MatchReader(new CsvFileReader_1.CsvFileReader(fileName));
+    };
     MatchReader.prototype.load = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {

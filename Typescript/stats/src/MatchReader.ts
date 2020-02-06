@@ -1,19 +1,15 @@
 import { DataReader } from './DataReader';
 import { MatchResult } from './MatchResult';
 import { dateToString } from './utils';
-export type MatchData = [
-  Date,
-  string,
-  string,
-  number,
-  number,
-  MatchResult,
-  string
-];
-
+import { MatchData } from './MatchData';
+import { CsvFileReader } from './CsvFileReader';
 export class MatchReader {
   matches: MatchData[] = [];
   constructor(public reader: DataReader) {}
+
+  static fromCsv(fileName: string): MatchReader {
+    return new MatchReader(new CsvFileReader(fileName));
+  }
 
   async load(): Promise<void> {
     await this.reader.read();
